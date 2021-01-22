@@ -53,7 +53,7 @@ class ServerClass{
         // Set User router
         const UserRouterClass = require('./routers/user.router');
         const userRouter = new UserRouterClass( { passport } );
-        this.server.use('/api', userRouter.init());
+        this.server.use('/api/users', userRouter.init());
 
         // Launch server
         this.launch();

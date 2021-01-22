@@ -6,8 +6,8 @@ const readOne = req => {
     return new Promise( (resolve, reject) => {
         Models.user.findById( req.params._id, (err, data) => {
             err
-                ? reject( res.json( err ) )
-                : resolve( res.json(data) );
+                ? reject(err)
+                : resolve(data);
         })
     })
 };
@@ -15,10 +15,10 @@ const readOne = req => {
 // Read all users
 const readAll = () => {
     return new Promise( (resolve, reject) => {
-        Models.user.find( (err, data) => {
+        Models.user.find({}, (err, data) => {
             err
-                ? reject( res.json( err ) )
-                : resolve( res.json(data) );
+                ? reject(err)
+                : resolve(data);
         })
     })
 };
@@ -28,8 +28,8 @@ const updateOne = req => {
     return new Promise( (resolve, reject) => {
         Models.user.updateOne( { _id: req.params._id }, req.body, (err, data) => {
             err
-                ? reject( res.json( err ) )
-                : resolve( res.json(data) );
+                ? reject(err)
+                : resolve(data);
         })
     })
 };

@@ -65,8 +65,10 @@ class RouterClass {
                                 // Set response cookie
                                 res.cookie( process.env.COOKIE_SECRET, userJwt, { maxAge: 700000, httpOnly: true } )
 
+                                // Delete password of data
+                                delete data.password
                                 // Send user data
-                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'User logged', data);
+                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'User logged', {user:data, token:userJwt});
                             };
                         }
                     })
