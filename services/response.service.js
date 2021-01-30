@@ -50,6 +50,19 @@ const sendApiErrorResponse = (endpoint, method, response, errorMessage, error, s
 
     return response.status(status).json(apiResponse);
 }
+
+const sendApiUnauthorizedResponse = (endpoint, method, response, errorMessage, error, status = 401) => {
+    const apiResponse = {
+        endpoint: endpoint,
+        method: method,
+        message: errorMessage,
+        err: error,
+        data: null,
+        status: status
+    }
+
+    return response.status(status).json(apiResponse);
+}
 //
 
 
@@ -58,6 +71,7 @@ module.exports = {
     sendBodyError,
     sendFieldsError,
     sendApiSuccessResponse,
-    sendApiErrorResponse
+    sendApiErrorResponse,
+    sendApiUnauthorizedResponse
 };
 //

@@ -20,7 +20,12 @@ const MandatoryFieldsService = {
         "spotifyLink",
         "deezerLink",
         "appleMusicLink",
-        "soundcloudLink"
+        "soundcloudLink",
+        "likes",
+        "banished",
+        "profilePicture",
+        "bannerPicture",
+        "creationDate"
     ],
     login: ['email', 'password']
 };

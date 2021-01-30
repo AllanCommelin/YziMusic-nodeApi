@@ -15,6 +15,7 @@ const User = new Schema({
     firstname: String,
     lastname: String,
     username: String,
+    likes: { type: Number, default: 0 },
     password: String,
     profilesTypes: Array,
     musicsTypes: Array,
@@ -51,6 +52,33 @@ User.methods.generateJwt = user => {
     }
 
     return jwt.sign(jwtObject, process.env.JWT_SECRET);
+}
+// Return user property Without password
+User.methods.getUserFields = user => {
+    return {
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+        likes: user.likes,
+        profilesTypes: user.profilesTypes,
+        musicsTypes: user.musicsTypes,
+        description: user.description,
+        location: user.location,
+        birthday: user.birthday,
+        facebookLink: user.facebookLink,
+        twitterLink: user.twitterLink,
+        instagramLink: user.instagramLink,
+        youtubeLink: user.youtubeLink,
+        spotifyLink: user.spotifyLink,
+        deezerLink: user.deezerLink,
+        appleMusicLink: user.appleMusicLink,
+        soundcloudLink: user.soundcloudLink,
+        profilePicture: user.profilePicture,
+        bannerPicture: user.bannerPicture,
+        creationDate: user.creationDate,
+        banished: user.banished
+    }
 }
 
 /* Export schema */

@@ -24,26 +24,40 @@ class RouterClass {
                 .catch( apiError => sendApiErrorResponse('/api/user', 'POST', res, 'Request failed', apiError) );
         });
 
+        //  Read 10 must liked users
+        this.router.get('/most/liked', (req, res) => {
+            Controllers.user.readMostLiked()
+                .then( apiResponse => sendApiSuccessResponse('/api/user/most/liked', 'POST', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse('/api/user/most/liked', 'POST', res, 'Request failed', apiError) );
+        });
+
+        //  Read 10 must recent users
+        this.router.get('/most/recent', (req, res) => {
+            Controllers.user.readMostRecent()
+                .then( apiResponse => sendApiSuccessResponse('/api/user/most/recent', 'POST', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse('/api/user/most/recent', 'POST', res, 'Request failed', apiError) );
+        });
+
         //  READ ONE USER
         this.router.get('/:_id', (req, res) => {
             Controllers.user.readOne(req)
-                .then( apiResponse => sendApiSuccessResponse('/api/user', 'POST', res, 'Request succeed', apiResponse) )
-                .catch( apiError => sendApiErrorResponse('/api/user', 'POST', res, 'Request failed', apiError) );
+                .then( apiResponse => sendApiSuccessResponse('/api/user/id', 'POST', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse('/api/user/id', 'POST', res, 'Request failed', apiError) );
         });
 
         //  UPDATE ONE USER : Auth require
         this.router.put('/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
             if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){
-                return sendBodyError('/api/user', 'POST', res, 'No data provided in the request body')
+                return sendBodyError('/api/user/id', 'POST', res, 'No data provided in the request body')
             } else {
                 // Check body data
                 const { ok, extra, miss } = checkFields( Mandatory.user, req.body );
                 // Error: bad fields provided
-                if( !ok ){ return sendFieldsError('/api/user', 'POST', res, 'Bad fields provided', miss, extra) }
+                if( !ok ){ return sendFieldsError('/api/user/id', 'POST', res, 'Bad fields provided', miss, extra) }
                 else{
                     Controllers.user.updateOne(req)
-                        .then( apiResponse => sendApiSuccessResponse('/api/user', 'POST', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiErrorResponse('/api/user', 'POST', res, 'Request failed', apiError) );
+                        .then( apiResponse => sendApiSuccessResponse('/api/user/id', 'POST', res, 'Request succeed', apiResponse) )
+                        .catch( apiError => sendApiErrorResponse('/api/user/id', 'POST', res, 'Request failed', apiError) );
                 }
             }
         });

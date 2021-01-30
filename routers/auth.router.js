@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const Models = require('../models/index');
 const { checkFields } = require('../services/request.service');
 const Mandatory = require('../services/mandatory.fields.service');
-const { sendBodyError,sendFieldsError,sendApiSuccessResponse,sendApiErrorResponse } = require('../services/response.service');
+const { sendBodyError,sendFieldsError,sendApiSuccessResponse,sendApiErrorResponse, sendApiUnauthorizedResponse } = require('../services/response.service');
 
 /*
     Define authentication routes
@@ -42,33 +42,32 @@ class RouterClass {
         this.router.post('/login', (req, res) => {
             // Check body data
             if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){
-                return sendBodyError('/auth/login', 'POST', res, 'No data provided in the request body')
+                return sendBodyError('/auth/login', 'POST', res, 'Aucun identifiant soumis')
             }
             else{
                 // Check body data
                 const { ok, extra, miss } = checkFields( Mandatory.login, req.body );
-
                 // Error: bad fields provided
-                if( !ok ) return sendFieldsError('/auth/login', 'POST', res, 'Bad fields provided', miss, extra);
+                if( !ok ) return sendFieldsError('/auth/login', 'POST', res, 'Champs requis', miss, extra);
                 else{
                     // Find user from email
                     Models.user.findOne( { email: req.body.email }, (err, data) => {
-                        if( err || data === null ){ return sendApiErrorResponse('/auth/login', 'POST', res, 'Email not found', err) }
+                        // Return 401 error
+                        if( err || data === null ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', err) }
                         else{
                             // Check user password
                             const validatedPassword = bcrypt.compareSync( req.body.password, data.password );
-                            if( !validatedPassword ){ return sendApiErrorResponse('/auth/login', 'POST', res, 'Invalid password', null) }
+                            // Return 401 error
+                            if( !validatedPassword ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', null) }
                             else{
+                                console.log(delete data.password)
+
                                 // Generate user JWT
                                 const userJwt = data.generateJwt(data);
-
                                 // Set response cookie
                                 res.cookie( process.env.COOKIE_SECRET, userJwt, { maxAge: 700000, httpOnly: true } )
-
-                                // Delete password of data
-                                delete data.password
                                 // Send user data
-                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'User logged', {user:data, token:userJwt});
+                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data), token:userJwt});
                             };
                         }
                     })
