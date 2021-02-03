@@ -60,8 +60,6 @@ class RouterClass {
                             // Return 401 error
                             if( !validatedPassword ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', null) }
                             else{
-                                console.log(delete data.password)
-
                                 // Generate user JWT
                                 const userJwt = data.generateJwt(data);
                                 // Set response cookie
