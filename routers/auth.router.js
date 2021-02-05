@@ -10,7 +10,8 @@ const { sendBodyError,sendFieldsError,sendApiSuccessResponse,sendApiErrorRespons
     Define authentication routes
 */
 class RouterClass {
-    constructor(){
+    constructor({ passport }){
+        this.passport = passport;
         this.router = express.Router();
     }
 
@@ -63,7 +64,7 @@ class RouterClass {
                                 // Generate user JWT
                                 const userJwt = data.generateJwt(data);
                                 // Set response cookie
-                                res.cookie( process.env.COOKIE_SECRET, userJwt, { maxAge: 700000, httpOnly: true } )
+                                res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
                                 // Send user data
                                 return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data), token:userJwt});
                             };
@@ -71,6 +72,16 @@ class RouterClass {
                     })
                 }
             }
+        });
+
+        this.router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+            res.status(201).json({
+                method: 'POST',
+                route: '/auth/me',
+                data: req.user,
+                error: null,
+                status: 201
+            });
         });
     }
 

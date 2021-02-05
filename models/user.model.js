@@ -56,6 +56,7 @@ User.methods.generateJwt = user => {
 // Return user property Without password
 User.methods.getUserFields = user => {
     return {
+        _id: user._id,
         email: user.email,
         firstname: user.firstname,
         lastname: user.lastname,

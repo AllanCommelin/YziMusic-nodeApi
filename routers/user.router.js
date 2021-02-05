@@ -51,7 +51,7 @@ class RouterClass {
                 return sendBodyError('/api/user/id', 'POST', res, 'No data provided in the request body')
             } else {
                 // Check body data
-                const { ok, extra, miss } = checkFields( Mandatory.user, req.body );
+                const { ok, extra, miss } = checkFields( Mandatory.userUpdate, req.body, true );
                 // Error: bad fields provided
                 if( !ok ){ return sendFieldsError('/api/user/id', 'POST', res, 'Bad fields provided', miss, extra) }
                 else{

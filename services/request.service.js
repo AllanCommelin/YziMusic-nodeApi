@@ -1,13 +1,15 @@
 /* Service definition */
-const checkFields = (required, bodyData) => {
+const checkFields = (required, bodyData, optional = false) => {
     /* Variables */
     const miss = [];
     const extra = [];
 
-    // Check missing fields
-    required.forEach((prop) => {
-        if (!(prop in bodyData)) miss.push(prop);
-    });
+    // Check missing fields if it's not optional
+    if (!optional) {
+        required.forEach((prop) => {
+            if (!(prop in bodyData)) miss.push(prop);
+        });
+    }
 
     // Check extra fields
     for (const prop in bodyData) {
