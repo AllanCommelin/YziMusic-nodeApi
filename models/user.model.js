@@ -31,7 +31,6 @@ const User = new Schema({
     appleMusicLink: String,
     soundcloudLink: String,
     profilePicture: { data: Buffer, contentType: String },
-    bannerPicture: { data: Buffer, contentType: String },
     // Define default values
     creationDate: { type: Date, default: new Date() },
     banished: { type: Boolean, default: false }
@@ -76,7 +75,6 @@ User.methods.getUserFields = user => {
         appleMusicLink: user.appleMusicLink,
         soundcloudLink: user.soundcloudLink,
         profilePicture: user.profilePicture,
-        bannerPicture: user.bannerPicture,
         creationDate: user.creationDate,
         banished: user.banished
     }

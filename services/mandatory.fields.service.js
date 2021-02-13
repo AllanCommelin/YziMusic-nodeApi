@@ -24,7 +24,6 @@ const MandatoryFieldsService = {
         "likes",
         "banished",
         "profilePicture",
-        "bannerPicture",
         "creationDate"
     ],
     userUpdate: [
@@ -49,7 +48,6 @@ const MandatoryFieldsService = {
         "likes",
         "banished",
         "profilePicture",
-        "bannerPicture",
     ],
     login: ['email', 'password']
 };
