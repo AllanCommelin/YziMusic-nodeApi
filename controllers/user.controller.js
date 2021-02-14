@@ -1,5 +1,7 @@
 /* Imports */
 const Models = require('../models/index');
+const path = require('path');
+const fs = require('fs');
 
 // Read one user
 const readOne = req => {
@@ -56,6 +58,24 @@ const updateOne = req => {
     })
 };
 
+// Update profile picture of one user
+const updatePicture = req => {
+    return new Promise( (resolve, reject) => {
+        // Create profilePicture
+        let formData = {
+            profilePicture: {
+                data: fs.readFileSync(path.join(path.dirname('server.js') + '/uploads/' + req.file.filename)),
+                contentType: 'image/png'
+            }
+        }
+        Models.user.updateOne( { _id: req.params._id }, formData, (err, data) => {
+            err
+                ? reject(err)
+                : resolve(data);
+        })
+    })
+};
+
 // Delete one user
 const deleteOne = req => {
     return new Promise( (resolve, reject) => {
@@ -73,5 +93,6 @@ module.exports = {
     updateOne,
     deleteOne,
     readMostLiked,
-    readMostRecent
+    readMostRecent,
+    updatePicture
 };

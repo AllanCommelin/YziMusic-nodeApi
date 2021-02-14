@@ -62,11 +62,17 @@ class RouterClass {
                             if( !validatedPassword ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', null) }
                             else{
                                 // Generate user JWT
-                                const userJwt = data.generateJwt(data);
+                                const userJwt = data.generateJwt({
+                                    _id: data._id,
+                                    email: data.email,
+                                    firstname: data.firstname,
+                                    lastname: data.lastname,
+                                    username: data.username,
+                                });
                                 // Set response cookie
                                 res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
                                 // Send user data
-                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data), token:userJwt});
+                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data)});
                             };
                         }
                     })
@@ -75,13 +81,16 @@ class RouterClass {
         });
 
         this.router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-            res.status(201).json({
-                method: 'POST',
-                route: '/auth/me',
-                data: req.user,
-                error: null,
-                status: 201
-            });
+            Models.user.findById( req.user._id, '-password', (err, data) => {
+                res.status(201).json({
+                    method: 'POST',
+                    route: '/auth/me',
+                    data: data.getUserFields(data),
+                    error: err,
+                    status: 201
+                });
+            })
+
         });
     }
 

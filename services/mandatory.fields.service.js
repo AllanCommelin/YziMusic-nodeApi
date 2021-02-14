@@ -49,7 +49,17 @@ const MandatoryFieldsService = {
         "banished",
         "profilePicture",
     ],
-    login: ['email', 'password']
+    login: ['email', 'password'],
+    userUpdatePicture: [
+        "fieldname",
+        "originalname",
+        "encoding",
+        "mimetype",
+        "destination",
+        "filename",
+        "path",
+        "size",
+    ]
 };
 
 /* Export */
