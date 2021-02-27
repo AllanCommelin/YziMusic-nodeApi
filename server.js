@@ -54,6 +54,11 @@ class ServerClass{
         const userRouter = new UserRouterClass( { passport } );
         this.server.use('/api/users', userRouter.init());
 
+        // Set Track router
+        const TrackRouterClass = require('./routers/track.router');
+        const trackRouter = new TrackRouterClass({ passport })
+        this.server.use('/api/tracks', trackRouter.init());
+
         // Launch server
         this.launch();
     }

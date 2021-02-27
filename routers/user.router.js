@@ -66,16 +66,16 @@ class RouterClass {
 
         this.router.put('/upload/picture/:_id', this.passport.authenticate('jwt', { session: false }), upload.single('image'), (req, res) => {
             if( typeof req.file === 'undefined' || req.file === null || Object.keys(req.file).length === 0 ){
-                return sendBodyError('/api/user/id', 'POST', res, 'No data provided in the request body')
+                return sendBodyError('/api/upload/picture/id', 'POST', res, 'No data provided in the request body')
             } else {
                 // Check body data
                 const { ok, extra, miss } = checkFields( Mandatory.userUpdatePicture, req.file, true );
                 // Error: bad fields provided
-                if( !ok ){ return sendFieldsError('/api/user/id/upload/picture', 'POST', res, 'Bad fields provided', miss, extra) }
+                if( !ok ){ return sendFieldsError('/api/upload/picture/id', 'POST', res, 'Bad fields provided', miss, extra) }
                 else{
                     Controllers.user.updatePicture(req)
-                        .then( apiResponse => sendApiSuccessResponse('/api/user/id/upload/picture', 'POST', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiErrorResponse('/api/user/id/upload/picture', 'POST', res, 'Request failed', apiError) );
+                        .then( apiResponse => sendApiSuccessResponse('/api/upload/picture/id', 'POST', res, 'Request succeed', apiResponse) )
+                        .catch( apiError => sendApiErrorResponse('/api/upload/picture/id', 'POST', res, 'Request failed', apiError) );
                 }
             }
         })

@@ -61,17 +61,23 @@ const updateOne = req => {
 // Update profile picture of one user
 const updatePicture = req => {
     return new Promise( (resolve, reject) => {
+        // Get path of picture
+        const picturePath = path.join(path.dirname('server.js') + '/uploads/' + req.file.filename)
         // Create profilePicture
         let formData = {
             profilePicture: {
-                data: fs.readFileSync(path.join(path.dirname('server.js') + '/uploads/' + req.file.filename)),
-                contentType: 'image/png'
+                data: fs.readFileSync(picturePath),
+                contentType: req.file.mimetype
             }
         }
         Models.user.updateOne( { _id: req.params._id }, formData, (err, data) => {
             err
                 ? reject(err)
                 : resolve(data);
+        })
+        // Delete picture in uploads directory after create document in bdd
+        fs.unlink(picturePath, (err) => {
+            if (err) console.error(err)
         })
     })
 };

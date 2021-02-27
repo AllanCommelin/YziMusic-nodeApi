@@ -74,11 +74,16 @@ User.methods.getUserFields = user => {
         deezerLink: user.deezerLink,
         appleMusicLink: user.appleMusicLink,
         soundcloudLink: user.soundcloudLink,
-        profilePicture: user.profilePicture,
+        profilePicture: user.profilePicture ? {
+            contentType: user.profilePicture.contentType,
+            picture: user.profilePicture.data.toString('base64')
+        } : null,
         creationDate: user.creationDate,
         banished: user.banished
     }
 }
+
+
 
 /* Export schema */
 module.exports = mongoose.model('user', User)

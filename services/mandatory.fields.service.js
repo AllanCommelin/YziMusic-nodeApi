@@ -59,6 +59,16 @@ const MandatoryFieldsService = {
         "filename",
         "path",
         "size",
+    ],
+    uploadTrack: [
+        "fieldname",
+        "originalname",
+        "encoding",
+        "mimetype",
+        "destination",
+        "filename",
+        "path",
+        "size",
     ]
 };
 
