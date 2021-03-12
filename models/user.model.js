@@ -15,7 +15,10 @@ const User = new Schema({
     firstname: String,
     lastname: String,
     username: String,
-    likes: { type: Number, default: 0 },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    }],
     password: String,
     profilesTypes: Array,
     musicsTypes: Array,
@@ -31,6 +34,10 @@ const User = new Schema({
     appleMusicLink: String,
     soundcloudLink: String,
     profilePicture: { data: Buffer, contentType: String },
+    tracks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'track'
+    }],
     // Define default values
     creationDate: { type: Date, default: new Date() },
     banished: { type: Boolean, default: false }
@@ -60,7 +67,8 @@ User.methods.getUserFields = user => {
         firstname: user.firstname,
         lastname: user.lastname,
         username: user.username,
-        likes: user.likes,
+        //Todo
+        //likes: user.likes,
         profilesTypes: user.profilesTypes,
         musicsTypes: user.musicsTypes,
         description: user.description,

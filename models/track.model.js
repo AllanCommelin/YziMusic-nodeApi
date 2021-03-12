@@ -7,7 +7,10 @@ const Track = new Schema({
     // Schema.org
     '@context': { type: String, default: 'http://schema.org' },
     '@type': { type: String, default: 'AudioObject' },
-    user_id: mongoose.Schema.Types.ObjectId,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     name: String,
     data: Buffer,
     contentType: String,
@@ -17,7 +20,7 @@ Track.methods.getReadableTrack = track => {
     return {
         '@context': track['@context'],
         '@type': track['@type'],
-        user_id: track.user_id,
+        user: track.user,
         name: track.name,
         audio: track.data.toString('base64'),
         contentType: track.contentType,

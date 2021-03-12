@@ -57,6 +57,17 @@ class RouterClass {
                 })
                 .catch( apiError => sendApiErrorResponse('/api/tracks/id', 'get', res, 'Request failed', apiError) );
         })
+
+        /**
+         * DELETE a specific track by track id /tracks/:id
+         */
+        this.router.delete('/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+            Controllers.track.deleteTrack(req)
+                .then( apiResponse => {
+                    sendApiSuccessResponse('/api/tracks/id', 'delete', res, 'Request succeed', apiResponse)
+                })
+                .catch( apiError => sendApiErrorResponse('/api/tracks/id', 'get', res, 'Request failed', apiError) );
+        })
     }
 
     init(){
