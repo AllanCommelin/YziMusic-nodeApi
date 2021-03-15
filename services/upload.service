@@ -9,5 +9,10 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now())
     }
 });
+const limitSize = 15 * 1024 * 1024 // 15 MB
+const limitOption = {
+    fileSize: limitSize,
+    fieldSize: limitSize
+}
 
-module.exports = multer({ storage: storage });
+module.exports = multer({ storage: storage, limits: limitOption });

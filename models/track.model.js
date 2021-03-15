@@ -20,6 +20,7 @@ Track.methods.getReadableTrack = track => {
     return {
         '@context': track['@context'],
         '@type': track['@type'],
+        _id: track._id,
         user: track.user,
         name: track.name,
         audio: track.data.toString('base64'),

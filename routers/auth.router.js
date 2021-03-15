@@ -52,45 +52,48 @@ class RouterClass {
                 if( !ok ) return sendFieldsError('/auth/login', 'POST', res, 'Champs requis', miss, extra);
                 else{
                     // Find user from email
-                    Models.user.findOne( { email: req.body.email }, (err, data) => {
-                        // Return 401 error
-                        if( err || data === null ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', err) }
-                        else{
-                            // Check user password
-                            const validatedPassword = bcrypt.compareSync( req.body.password, data.password );
+                    Models.user.findOne( { email: req.body.email })
+                        .populate({path: 'tracks', select: '_id name'})
+                        .exec((err, data) => {
                             // Return 401 error
-                            if( !validatedPassword ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', null) }
+                            if( err || data === null ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', err) }
                             else{
-                                // Generate user JWT
-                                const userJwt = data.generateJwt({
-                                    _id: data._id,
-                                    email: data.email,
-                                    firstname: data.firstname,
-                                    lastname: data.lastname,
-                                    username: data.username,
-                                });
-                                // Set response cookie
-                                res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
-                                // Send user data
-                                return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data)});
-                            };
-                        }
+                                // Check user password
+                                const validatedPassword = bcrypt.compareSync( req.body.password, data.password );
+                                // Return 401 error
+                                if( !validatedPassword ){ return sendApiUnauthorizedResponse('/auth/login', 'POST', res, 'Identifiants incorrects', null) }
+                                else{
+                                    // Generate user JWT
+                                    const userJwt = data.generateJwt({
+                                        _id: data._id,
+                                        email: data.email,
+                                        firstname: data.firstname,
+                                        lastname: data.lastname,
+                                        username: data.username,
+                                    });
+                                    // Set response cookie
+                                    res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
+                                    // Send user data
+                                    return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data)});
+                                };
+                            }
                     })
                 }
             }
         });
 
         this.router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-            Models.user.findById( req.user._id, '-password', (err, data) => {
-                res.status(201).json({
-                    method: 'POST',
-                    route: '/auth/me',
-                    data: data.getUserFields(data),
-                    error: err,
-                    status: 201
+            Models.user.findById( req.user._id, '-password')
+                .populate({path: 'tracks', select: '_id name'})
+                .exec((err, data) => {
+                    res.status(201).json({
+                        method: 'POST',
+                        route: '/auth/me',
+                        data: data.getUserFields(data),
+                        error: err,
+                        status: 201
+                    });
                 });
-            })
-
         });
     }
 

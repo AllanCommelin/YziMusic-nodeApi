@@ -69,6 +69,7 @@ User.methods.getUserFields = user => {
         username: user.username,
         //Todo
         //likes: user.likes,
+        tracks: user.tracks,
         profilesTypes: user.profilesTypes,
         musicsTypes: user.musicsTypes,
         description: user.description,
@@ -82,7 +83,7 @@ User.methods.getUserFields = user => {
         deezerLink: user.deezerLink,
         appleMusicLink: user.appleMusicLink,
         soundcloudLink: user.soundcloudLink,
-        profilePicture: user.profilePicture ? {
+        profilePicture: user.profilePicture.data ? {
             contentType: user.profilePicture.contentType,
             picture: user.profilePicture.data.toString('base64')
         } : null,

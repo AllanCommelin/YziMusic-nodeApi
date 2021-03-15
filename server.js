@@ -29,7 +29,7 @@ class ServerClass{
         });
 
         //=> Body-parser
-        this.server.use(bodyParser.json({limit: '10mb'}));
+        this.server.use(bodyParser.json({limit: '15mb'}));
         this.server.use(bodyParser.urlencoded({ extended: true }));
 
         //=> Use CookieParser to setup server side cookies

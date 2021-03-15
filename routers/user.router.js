@@ -43,7 +43,7 @@ class RouterClass {
         //  READ ONE USER
         this.router.get('/:_id', (req, res) => {
             Controllers.user.readOne(req)
-                .then( apiResponse => sendApiSuccessResponse('/api/user/id', 'POST', res, 'Request succeed', apiResponse.getUserFields(apiResponse)) )
+                .then( apiResponse => sendApiSuccessResponse('/api/user/id', 'POST', res, 'Request succeed', apiResponse) )
                 .catch( apiError => sendApiErrorResponse('/api/user/id', 'POST', res, 'Request failed', apiError) );
         });
 

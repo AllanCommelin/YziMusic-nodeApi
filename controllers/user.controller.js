@@ -6,11 +6,13 @@ const fs = require('fs');
 // Read one user
 const readOne = req => {
     return new Promise( (resolve, reject) => {
-        Models.user.findById( req.params._id, '-password', (err, data) => {
-            err
-                ? reject(err)
-                : resolve(data);
-        })
+        Models.user.findById( req.params._id, '-password')
+            .populate({path:'tracks', select:'name _id'})
+            .exec((err, data) => {
+                err
+                    ? reject(err)
+                    : resolve(data.getUserFields(data));
+            })
     })
 };
 
