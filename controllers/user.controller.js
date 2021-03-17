@@ -60,6 +60,29 @@ const updateOne = req => {
     })
 };
 
+// Like one user
+const likeUser = req => {
+    return new Promise( async (resolve, reject) => {
+        const user = await Models.user.findById(req.body.userId)
+        if (!user) reject('Don\'t find user')
+        user.likes.push(req.user._id)
+        user.save()
+        resolve(user)
+    })
+};
+// Like one user
+const unlikeUser = req => {
+    return new Promise( async (resolve, reject) => {
+        const user = await Models.user.findById(req.body.userId)
+        if (!user) reject('Don\'t find user')
+        const index = user.likes.findIndex(user => user._id === req.user._id)
+        if (!index) reject('Auth user don\'t like this user')
+        user.likes.splice(index, 1);
+        user.save()
+        resolve(user)
+    })
+};
+
 // Update profile picture of one user
 const updatePicture = req => {
     return new Promise( (resolve, reject) => {
@@ -102,5 +125,7 @@ module.exports = {
     deleteOne,
     readMostLiked,
     readMostRecent,
-    updatePicture
+    updatePicture,
+    likeUser,
+    unlikeUser
 };

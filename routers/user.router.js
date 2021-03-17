@@ -47,7 +47,42 @@ class RouterClass {
                 .catch( apiError => sendApiErrorResponse('/api/user/id', 'POST', res, 'Request failed', apiError) );
         });
 
+        //  LIKE ONE USER : Auth require
+        this.router.put('/like', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+            if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){
+                return sendBodyError('/api/user/like', 'POST', res, 'No data provided in the request body')
+            } else {
+                // Check body data
+                const { ok, extra, miss } = checkFields(Mandatory.userLike, req.body);
+                // Error: bad fields provided
+                if( !ok ){ return sendFieldsError('/api/user/like', 'POST', res, 'Bad fields provided', miss, extra) }
+                else{
+                    Controllers.user.likeUser(req)
+                        .then( apiResponse => sendApiSuccessResponse('/api/user/like', 'POST', res, 'Request succeed', apiResponse) )
+                        .catch( apiError => sendApiErrorResponse('/api/user/like', 'POST', res, 'Request failed', apiError) );
+                }
+            }
+        });
+
+        //  UNLIKE ONE USER : Auth require
+        this.router.put('/unlike', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+            if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){
+                return sendBodyError('/api/user/unlike', 'POST', res, 'No data provided in the request body')
+            } else {
+                // Check body data
+                const { ok, extra, miss } = checkFields(Mandatory.userLike, req.body);
+                // Error: bad fields provided
+                if( !ok ){ return sendFieldsError('/api/user/unlike', 'POST', res, 'Bad fields provided', miss, extra) }
+                else{
+                    Controllers.user.unlikeUser(req)
+                        .then( apiResponse => sendApiSuccessResponse('/api/user/unlike', 'POST', res, 'Request succeed', apiResponse) )
+                        .catch( apiError => sendApiErrorResponse('/api/user/unlike', 'POST', res, 'Request failed', apiError) );
+                }
+            }
+        });
+
         //  UPDATE ONE USER : Auth require
+        //TODO: On a id du user dans req.user donc on peut enlever :_id de l'url
         this.router.put('/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
             if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){
                 return sendBodyError('/api/user/id', 'POST', res, 'No data provided in the request body')

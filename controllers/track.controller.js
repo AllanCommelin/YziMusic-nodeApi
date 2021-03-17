@@ -9,9 +9,12 @@ const uploadTrack = req => {
         // Get path of track
         const trackPath = path.join(path.dirname('server.js') + '/uploads/' + req.file.filename)
         // Create track object
+        console.log(req.body.name)
         let track = {
             user: req.user._id,
-            name: req.file.originalname,
+            name: req.body.name,
+            tag: req.body.tag,
+            date: req.body.date,
             data: fs.readFileSync(trackPath),
             contentType: req.file.mimetype,
         }

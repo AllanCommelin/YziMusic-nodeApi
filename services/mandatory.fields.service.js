@@ -21,7 +21,6 @@ const MandatoryFieldsService = {
         "deezerLink",
         "appleMusicLink",
         "soundcloudLink",
-        "likes",
         "banished",
         "profilePicture",
         "creationDate"
@@ -69,6 +68,9 @@ const MandatoryFieldsService = {
         "filename",
         "path",
         "size",
+    ],
+    userLike: [
+        "userId"
     ]
 };
 

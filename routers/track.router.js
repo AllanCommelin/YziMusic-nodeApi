@@ -18,7 +18,7 @@ class RouterClass {
         Define track routes
     */
     routes() {
-        /**
+        /**s
          * POST /tracks
          */
         this.router.post('/upload/', this.passport.authenticate('jwt', { session: false }), upload.single('track'), (req, res) => {

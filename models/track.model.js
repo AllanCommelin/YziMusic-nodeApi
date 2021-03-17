@@ -12,6 +12,8 @@ const Track = new Schema({
         ref: 'user'
     },
     name: String,
+    tag: String,
+    date: String,
     data: Buffer,
     contentType: String,
 })
@@ -22,7 +24,9 @@ Track.methods.getReadableTrack = track => {
         '@type': track['@type'],
         _id: track._id,
         user: track.user,
+        tag: track.tag,
         name: track.name,
+        date: track.date,
         audio: track.data.toString('base64'),
         contentType: track.contentType,
     }

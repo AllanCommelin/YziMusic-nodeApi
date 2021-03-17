@@ -68,7 +68,7 @@ User.methods.getUserFields = user => {
         lastname: user.lastname,
         username: user.username,
         //Todo
-        //likes: user.likes,
+        likes: user.likes,
         tracks: user.tracks,
         profilesTypes: user.profilesTypes,
         musicsTypes: user.musicsTypes,
