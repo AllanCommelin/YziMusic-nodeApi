@@ -52,7 +52,21 @@ const getTrackById = req => {
 
 const deleteTrack = req => {
     return new Promise((resolve, reject) => {
-        Models.track.findByIdAndRemove(req.params._id, (err, data) => {
+        Models.track.findByIdAndRemove(req.params._id, async (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                const user = await Models.user.findById(req.user._id)
+                if (!user) reject('Can\'t find user')
+                else {
+                    const index = user.tracks.findIndex(track => track._id === req.params._id)
+                    if (!index) reject('User don\'t have this track')
+                    else {
+                        user.tracks.splice(index, 1);
+                        user.save()
+                    }
+                }
+            }
             err ? reject(err) : resolve(data);
         })
     })
