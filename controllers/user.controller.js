@@ -20,9 +20,8 @@ const readOne = req => {
 const readAll = () => {
     return new Promise( (resolve, reject) => {
         Models.user.find({}, '-password', (err, data) => {
-            err
-                ? reject(err)
-                : resolve(data);
+            const users = data.map(user => user.getUserFields(user))
+            err ? reject(err) : resolve(users);
         })
     })
 };
@@ -31,9 +30,8 @@ const readAll = () => {
 const readMostLiked = () => {
     return new Promise( (resolve, reject) => {
         Models.user.find({}, '-password', {sort: {'likes': 'desc'}, limit: 10}, (err, data) => {
-            err
-                ? reject(err)
-                : resolve(data);
+            const users = data.map(user => user.getUserFields(user))
+            err ? reject(err) : resolve(users);
         })
     })
 }
@@ -42,9 +40,8 @@ const readMostLiked = () => {
 const readMostRecent = () => {
     return new Promise( (resolve, reject) => {
         Models.user.find({}, '-password', {sort: {'creationDate': 'desc'}, limit: 10}, (err, data) => {
-            err
-                ? reject(err)
-                : resolve(data);
+            const users = data.map(user => user.getUserFields(user))
+            err ? reject(err) : resolve(users);
         })
     })
 }
@@ -67,7 +64,8 @@ const likeUser = req => {
         if (!user) reject('Don\'t find user')
         user.likes.push(req.user._id)
         user.save()
-        resolve(user)
+
+        resolve(user.getUserFields(user))
     })
 };
 // Like one user
@@ -79,7 +77,7 @@ const unlikeUser = req => {
         if (!index) reject('Auth user don\'t like this user')
         user.likes.splice(index, 1);
         user.save()
-        resolve(user)
+        resolve(user.getUserFields(user))
     })
 };
 
@@ -121,6 +119,7 @@ const deleteOne = req => {
 // Search user
 const searchUsers = req => {
     return new Promise( (resolve, reject) => {
+        // Todo add filter by profile types and music types
         Models.user.aggregate([{
             $match: {
                 $or: [
@@ -130,9 +129,13 @@ const searchUsers = req => {
                 ]
             }
         }]).exec((err, data) => {
-            err ?
-                reject(err) :
-                resolve(data);
+            data.forEach(user => {
+                user.profilePicture = user.profilePicture.data ? {
+                    contentType: user.profilePicture.contentType,
+                    picture: user.profilePicture.data.toString('base64')
+                } : null
+            })
+            err ? reject(err) : resolve(data);
         });
     })
 }

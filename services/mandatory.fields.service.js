@@ -19,6 +19,7 @@ const MandatoryFieldsService = {
         "youtubeLink",
         "spotifyLink",
         "deezerLink",
+        "likes",
         "appleMusicLink",
         "soundcloudLink",
         "banished",
