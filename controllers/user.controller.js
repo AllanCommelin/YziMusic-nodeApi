@@ -112,9 +112,28 @@ const deleteOne = req => {
     return new Promise( (resolve, reject) => {
         Models.user.findByIdAndDelete( req.params._id, (err, data) => {
             err
-                ? reject( res.json( err ) )
-                : resolve( res.json(data) );
+                ? reject( err )
+                : resolve( data );
         })
+    })
+}
+
+// Search user
+const searchUsers = req => {
+    return new Promise( (resolve, reject) => {
+        Models.user.aggregate([{
+            $match: {
+                $or: [
+                    { username: {$regex: req.query.search, $options: "i"}},
+                    { firstname: {$regex: req.query.search, $options: "i"}},
+                    { lastname: {$regex: req.query.search, $options: "i"}},
+                ]
+            }
+        }]).exec((err, data) => {
+            err ?
+                reject(err) :
+                resolve(data);
+        });
     })
 }
 
@@ -127,5 +146,6 @@ module.exports = {
     readMostRecent,
     updatePicture,
     likeUser,
-    unlikeUser
+    unlikeUser,
+    searchUsers
 };

@@ -26,6 +26,13 @@ class RouterClass {
                 .catch( apiError => sendApiErrorResponse('/api/user', 'POST', res, 'Request failed', apiError) );
         });
 
+        // SEARCH USERS
+        this.router.get('/search', (req, res) => {
+            Controllers.user.searchUsers(req)
+                .then( apiResponse => sendApiSuccessResponse('/api/user/search', 'GET', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse('/api/user/search', 'GET', res, 'Request failed', apiError) );
+        })
+
         //  Read 10 must liked users
         this.router.get('/most/liked', (req, res) => {
             Controllers.user.readMostLiked()
