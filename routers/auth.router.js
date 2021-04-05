@@ -30,6 +30,8 @@ class RouterClass {
                 else {
                     // Encrypt user password
                     req.body.password = await bcrypt.hash( req.body.password, 10 );
+                    // By default, user has role user
+                    req.body.role = 'user'
 
                     // Register new user
                     Models.user.create( req.body )

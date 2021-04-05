@@ -24,7 +24,8 @@ const MandatoryFieldsService = {
         "soundcloudLink",
         "banished",
         "profilePicture",
-        "creationDate"
+        "creationDate",
+        "role"
     ],
     userUpdate: [
         "email",

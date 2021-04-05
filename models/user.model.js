@@ -40,7 +40,8 @@ const User = new Schema({
     }],
     // Define default values
     creationDate: { type: Date, default: new Date() },
-    banished: { type: Boolean, default: false }
+    banished: { type: Boolean, default: false },
+    role: String
 })
 
 /* Methods */
@@ -82,12 +83,13 @@ User.methods.getUserFields = user => {
         deezerLink: user.deezerLink,
         appleMusicLink: user.appleMusicLink,
         soundcloudLink: user.soundcloudLink,
-        profilePicture: user.profilePicture.data ? {
+        profilePicture: (user.profilePicture && user.profilePicture.data) ? {
             contentType: user.profilePicture.contentType,
             picture: user.profilePicture.data.toString('base64')
         } : null,
         creationDate: user.creationDate,
-        banished: user.banished
+        banished: user.banished,
+        role: user.role ? user.role : 'user'
     }
 }
 

@@ -19,7 +19,7 @@ const readOne = req => {
 // Read all users
 const readAll = () => {
     return new Promise( (resolve, reject) => {
-        Models.user.find({}, '-password', (err, data) => {
+        Models.user.find({role: 'user'}, '-password', (err, data) => {
             const users = data.map(user => user.getUserFields(user))
             err ? reject(err) : resolve(users);
         })
@@ -29,7 +29,7 @@ const readAll = () => {
 // Read 10 must liked users
 const readMostLiked = () => {
     return new Promise( (resolve, reject) => {
-        Models.user.find({}, '-password', {sort: {'likes': 'desc'}, limit: 10}, (err, data) => {
+        Models.user.find({role: 'user'}, '-password', {sort: {'likes': 'desc'}, limit: 10}, (err, data) => {
             const users = data.map(user => user.getUserFields(user))
             err ? reject(err) : resolve(users);
         })
@@ -39,7 +39,7 @@ const readMostLiked = () => {
 // Read 10 must recent users
 const readMostRecent = () => {
     return new Promise( (resolve, reject) => {
-        Models.user.find({}, '-password', {sort: {'creationDate': 'desc'}, limit: 10}, (err, data) => {
+        Models.user.find({role: 'user'}, '-password', {sort: {'creationDate': 'desc'}, limit: 10}, (err, data) => {
             const users = data.map(user => user.getUserFields(user))
             err ? reject(err) : resolve(users);
         })
@@ -129,8 +129,11 @@ const searchUsers = req => {
                 ]
             }
         }]).exec((err, data) => {
-            data.forEach(user => {
-                user.profilePicture = user.profilePicture.data ? {
+            data.forEach((user, index) => {
+                // Remove users with the admin role
+                if (user.role === 'admin') data.splice(index, 1)
+                // Convert profile picture buffer to base64
+                user.profilePicture = (user.profilePicture && user.profilePicture.data) ? {
                     contentType: user.profilePicture.contentType,
                     picture: user.profilePicture.data.toString('base64')
                 } : null
