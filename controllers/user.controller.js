@@ -143,6 +143,33 @@ const searchUsers = req => {
     })
 }
 
+const statsUsersCount = () => {
+    return new Promise( async (resolve, reject) => {
+        // Get users count
+        const usersCount = await Models.user.countDocuments({role: 'user'}, (err, data) => {
+            return data
+        });
+        // Get beatmaker count
+        const beatmakerCount = await Models.user.countDocuments({'role': 'user', 'profilesTypes': {$in: ['beatmaker']}},(err, data) => {
+            return data
+        });
+        // Get singer count
+        const singerCount = await Models.user.countDocuments({'role': 'user', 'profilesTypes': {$in: ['singer']}},(err, data) => {
+            return data
+        });
+        // Get musician count
+        const musicianCount = await Models.user.countDocuments({'role': 'user', 'profilesTypes': {$in: ['musician']}},(err, data) => {
+            return data
+        });
+        resolve({
+            'users': usersCount,
+            'beatmaker': beatmakerCount,
+            'singer': singerCount,
+            'musician': musicianCount,
+        })
+    })
+}
+
 module.exports = {
     readOne,
     readAll,
@@ -153,5 +180,6 @@ module.exports = {
     updatePicture,
     likeUser,
     unlikeUser,
-    searchUsers
+    searchUsers,
+    statsUsersCount
 };

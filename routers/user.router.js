@@ -47,6 +47,14 @@ class RouterClass {
                 .catch( apiError => sendApiErrorResponse('/api/user/most/recent', 'POST', res, 'Request failed', apiError) );
         });
 
+        // GET STATS
+        this.router.get('/stats', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+            console.log('Want to get stats')
+            Controllers.user.statsUsersCount()
+                .then( apiResponse => sendApiSuccessResponse('/api/user/stats', 'GET', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse('/api/user/stats', 'GET', res, 'Request failed', apiError) );
+        })
+
         //  READ ONE USER
         this.router.get('/:_id', (req, res) => {
             Controllers.user.readOne(req)
