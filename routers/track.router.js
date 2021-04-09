@@ -40,7 +40,7 @@ class RouterClass {
         /**
          * GET all tracks for user without data buffer /tracks
          */
-        this.router.get('/', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+        this.router.get('/', (req, res) => {
             Controllers.track.getAllByUser(req)
                 .then( apiResponse => sendApiSuccessResponse('/api/tracks', 'get', res, 'Request succeed', apiResponse) )
                 .catch( apiError => sendApiErrorResponse('/api/tracks', 'get', res, 'Request failed', apiError) );
@@ -49,7 +49,7 @@ class RouterClass {
         /**
          * GET a specific track by track id /tracks/:id
          */
-        this.router.get('/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+        this.router.get('/:_id', (req, res) => {
             Controllers.track.getTrackById(req)
                 .then( apiResponse => {
                     const track = apiResponse.getReadableTrack(apiResponse)
