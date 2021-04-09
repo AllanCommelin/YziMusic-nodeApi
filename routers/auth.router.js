@@ -83,7 +83,7 @@ class RouterClass {
                 }
             }
         });
-
+        // Get infos for connected user
         this.router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {
             Models.user.findById( req.user._id, '-password')
                 .populate({path: 'tracks', select: '_id name'})

@@ -163,9 +163,9 @@ const statsUsersCount = () => {
         });
         resolve({
             'users': usersCount,
-            'beatmaker': beatmakerCount,
-            'singer': singerCount,
-            'musician': musicianCount,
+            'beatmakers': beatmakerCount,
+            'singers': singerCount,
+            'musicians': musicianCount,
         })
     })
 }

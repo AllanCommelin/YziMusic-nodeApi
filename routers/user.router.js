@@ -49,7 +49,6 @@ class RouterClass {
 
         // GET STATS
         this.router.get('/stats', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-            console.log('Want to get stats')
             Controllers.user.statsUsersCount()
                 .then( apiResponse => sendApiSuccessResponse('/api/user/stats', 'GET', res, 'Request succeed', apiResponse) )
                 .catch( apiError => sendApiErrorResponse('/api/user/stats', 'GET', res, 'Request failed', apiError) );
@@ -114,6 +113,7 @@ class RouterClass {
             }
         });
 
+        // PUT : Upload picture for a user
         this.router.put('/upload/picture/:_id', this.passport.authenticate('jwt', { session: false }), upload.single('image'), (req, res) => {
             if( typeof req.file === 'undefined' || req.file === null || Object.keys(req.file).length === 0 ){
                 return sendBodyError('/api/upload/picture/id', 'POST', res, 'No data provided in the request body')
@@ -132,9 +132,13 @@ class RouterClass {
 
         //  DELETE ONE USER : Auth require
         this.router.delete('/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-            Controllers.user.deleteOne(req)
-                .then( apiResponse => sendApiSuccessResponse('/api/user', 'POST', res, 'Request succeed', apiResponse) )
-                .catch( apiError => sendApiErrorResponse('/api/user', 'POST', res, 'Request failed', apiError) );
+            if( req.user.role === 'admin') {
+                Controllers.user.deleteOne(req)
+                    .then( apiResponse => sendApiSuccessResponse('/api/user', 'DELETE', res, 'Request succeed', apiResponse) )
+                    .catch( apiError => sendApiErrorResponse('/api/user', 'DELETE', res, 'Request failed', apiError) );
+            } else {
+                return sendApiErrorResponse('/api/user', 'DELETE', res, 'Manque de permission')
+            }
         })
     }
 
