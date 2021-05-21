@@ -1,11 +1,12 @@
 {
-  "name": "YziMusic",
+  "name": "yzimusic-nodeapi",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development nodemon server.js"
+    "start-dev": "NODE_ENV=development nodemon server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,5 +25,8 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "path": "^0.12.7"
+  },
+  "engines": {
+    "node": "12.13.0"
   }
 }
