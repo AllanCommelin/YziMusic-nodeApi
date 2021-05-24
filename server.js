@@ -35,13 +35,12 @@ class ServerClass{
 
         //=> Use CookieParser to setup server side cookies
         this.server.use(cookieParser(process.env.COOKIE_SECRET));
-        this.server.enable('trust proxy'); // optional, not needed for secure cookies
+        this.server.set('trust proxy', 1)
         this.server.use(session({
             secret : process.env.COOKIE_SECRET,
             proxy : true,
             cookie : {
                 secure : true,
-                maxAge: 700000,
             }
         }));
 
