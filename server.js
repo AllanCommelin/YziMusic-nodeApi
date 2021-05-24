@@ -40,6 +40,7 @@ class ServerClass{
             resave: true,
             proxy : true,
             cookie : {
+                sameSite: 'none',
                 secure : true,
             }
         }));
