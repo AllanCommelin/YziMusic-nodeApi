@@ -4,6 +4,7 @@ const express = require('express'); //=> https://www.npmjs.com/package/express
 const bodyParser = require('body-parser'); //=> https://www.npmjs.com/package/body-parser
 const cookieParser = require('cookie-parser'); //=> https://www.npmjs.com/package/cookie-parser
 const passport = require('passport'); //=> https://www.npmjs.com/package/passport
+const session = require('express-session');
 //const path = require('path'); //=> https://www.npmjs.com/package/path
 // Services
 const MONGOclass = require('./services/mongo.class');
@@ -34,6 +35,15 @@ class ServerClass{
 
         //=> Use CookieParser to setup server side cookies
         this.server.use(cookieParser(process.env.COOKIE_SECRET));
+        this.server.enable('trust proxy'); // optional, not needed for secure cookies
+        this.server.use(session({
+            secret : process.env.COOKIE_SECRET,
+            proxy : true,
+            cookie : {
+                secure : true,
+                maxAge: 700000,
+            }
+        }));
 
         // Start server configuration
         this.config();
