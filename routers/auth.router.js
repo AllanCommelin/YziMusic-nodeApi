@@ -74,7 +74,7 @@ class RouterClass {
                                         username: data.username,
                                     });
                                     // Set response cookie
-                                    res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true, sameSite: 'none' } )
+                                    res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true, sameSite: 'none', secure : true } )
                                     // Send user data
                                     return sendApiSuccessResponse('/auth/login', 'POST', res, 'Utilisateur connecté', {user: data.getUserFields(data)});
                                 };
